@@ -37,7 +37,7 @@ Each task contains:
 
 ## REST API Integration
 Motivational quotes are fetched from:
-https://zenquotes.io/api/random
+https://api.quotable.io/random
 
 Displays:
 - Quote
