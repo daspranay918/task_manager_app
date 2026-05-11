@@ -77,79 +77,91 @@ class _SignupScreenState extends State<SignupScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "Task Manager",
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.deepPurple,
+          child: SingleChildScrollView(
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Task Manager",
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepPurple,
+                    ),
                   ),
-                ),
 
-                const SizedBox(height: 40),
+                  const SizedBox(height: 40),
 
-                CustomTextField(controller: nameController, hint: "Full Name"),
+                  CustomTextField(
+                    controller: nameController,
+                    hint: "Full Name",
+                    icon: Icons.person,
+                  ),
 
-                const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                CustomTextField(controller: emailController, hint: "Email"),
+                  CustomTextField(
+                    controller: emailController,
+                    hint: "Email",
+                    icon: Icons.email,
+                  ),
 
-                const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                CustomTextField(
-                  controller: passwordController,
-                  hint: "Password",
-                  isPassword: true,
-                ),
+                  CustomTextField(
+                    controller: passwordController,
+                    hint: "Password",
+                    isPassword: true,
+                    icon: Icons.lock_outline,
+                  ),
 
-                const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                CustomTextField(
-                  controller: confirmPasswordController,
-                  hint: "Confirm Password",
-                  isPassword: true,
-                ),
+                  CustomTextField(
+                    controller: confirmPasswordController,
+                    hint: "Confirm Password",
+                    isPassword: true,
+                    icon: Icons.lock_outline,
+                  ),
 
-                const SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
-                CustomButton(
-                  text: "Signup",
-                  isLoading: isLoading,
-                  onPressed: signup,
-                ),
+                  CustomButton(
+                    text: "Signup",
+                    isLoading: isLoading,
+                    onPressed: signup,
+                  ),
 
-                const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Already have an account? "),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Already have an account? "),
 
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const LoginScreen(),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const LoginScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          "Login",
+                          style: TextStyle(
+                            color: Colors.deepPurple,
+                            fontWeight: FontWeight.bold,
                           ),
-                        );
-                      },
-                      child: const Text(
-                        "Login",
-                        style: TextStyle(
-                          color: Colors.deepPurple,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

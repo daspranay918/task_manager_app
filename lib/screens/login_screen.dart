@@ -73,7 +73,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 40),
 
-                CustomTextField(controller: emailController, hint: "Email"),
+                CustomTextField(
+                  controller: emailController,
+                  hint: "Email",
+                  icon: Icons.person,
+                ),
 
                 const SizedBox(height: 20),
 
@@ -81,6 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   controller: passwordController,
                   hint: "Password",
                   isPassword: true,
+                  icon: Icons.lock_outline,
                 ),
 
                 const SizedBox(height: 30),

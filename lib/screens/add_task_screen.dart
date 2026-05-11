@@ -8,54 +8,40 @@ import 'package:task_manager/widgets/custom_button.dart';
 class AddTaskScreen extends StatefulWidget {
   final TaskModel? task;
 
-  const AddTaskScreen({
-    super.key,
-    this.task,
-  });
+  const AddTaskScreen({super.key, this.task});
 
   @override
-  State<AddTaskScreen> createState() =>
-      _AddTaskScreenState();
+  State<AddTaskScreen> createState() => _AddTaskScreenState();
 }
 
-class _AddTaskScreenState
-    extends State<AddTaskScreen> {
-  final titleController =
-      TextEditingController();
+class _AddTaskScreenState extends State<AddTaskScreen> {
+  final titleController = TextEditingController();
 
-  final descriptionController =
-      TextEditingController();
+  final descriptionController = TextEditingController();
 
-  final formKey =
-      GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   bool isLoading = false;
 
   String selectedDate = "";
 
-  final FirestoreService
-      firestoreService =
-      FirestoreService();
+  final FirestoreService firestoreService = FirestoreService();
 
   @override
   void initState() {
     super.initState();
 
     if (widget.task != null) {
-      titleController.text =
-          widget.task!.title;
+      titleController.text = widget.task!.title;
 
-      descriptionController.text =
-          widget.task!.description;
+      descriptionController.text = widget.task!.description;
 
-      selectedDate =
-          widget.task!.date;
+      selectedDate = widget.task!.date;
     }
   }
 
   Future<void> pickDate() async {
-    DateTime? pickedDate =
-        await showDatePicker(
+    DateTime? pickedDate = await showDatePicker(
       context: context,
 
       firstDate: DateTime(2024),
@@ -66,13 +52,8 @@ class _AddTaskScreenState
 
       builder: (context, child) {
         return Theme(
-          data: ThemeData.light()
-              .copyWith(
-            colorScheme:
-                const ColorScheme.light(
-              primary:
-                  Colors.deepPurple,
-            ),
+          data: ThemeData.light().copyWith(
+            colorScheme: const ColorScheme.light(primary: Colors.deepPurple),
           ),
 
           child: child!,
@@ -82,23 +63,18 @@ class _AddTaskScreenState
 
     if (pickedDate != null) {
       setState(() {
-        selectedDate = DateFormat(
-          'dd MMM yyyy',
-        ).format(pickedDate);
+        selectedDate = DateFormat('dd MMM yyyy').format(pickedDate);
       });
     }
   }
 
   Future<void> saveTask() async {
-    if (!formKey.currentState!
-        .validate()) {
+    if (!formKey.currentState!.validate()) {
       return;
     }
 
     if (selectedDate.isEmpty) {
-      Fluttertoast.showToast(
-        msg: "Please select date",
-      );
+      Fluttertoast.showToast(msg: "Please select date");
 
       return;
     }
@@ -111,41 +87,28 @@ class _AddTaskScreenState
       TaskModel task = TaskModel(
         id: widget.task?.id ?? '',
 
-        title:
-            titleController.text.trim(),
+        title: titleController.text.trim(),
 
-        description:
-            descriptionController.text
-                .trim(),
+        description: descriptionController.text.trim(),
 
         date: selectedDate,
 
-        status:
-            widget.task?.status ??
-                false,
+        status: widget.task?.status ?? false,
       );
 
       if (widget.task == null) {
-        await firestoreService
-            .addTask(task);
+        await firestoreService.addTask(task);
 
-        Fluttertoast.showToast(
-          msg: "Task Added",
-        );
+        Fluttertoast.showToast(msg: "Task Added");
       } else {
-        await firestoreService
-            .updateTask(task);
+        await firestoreService.updateTask(task);
 
-        Fluttertoast.showToast(
-          msg: "Task Updated",
-        );
+        Fluttertoast.showToast(msg: "Task Updated");
       }
 
       Navigator.pop(context);
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-      );
+      Fluttertoast.showToast(msg: e.toString());
     }
 
     setState(() {
@@ -160,47 +123,30 @@ class _AddTaskScreenState
     return InputDecoration(
       hintText: hint,
 
-      prefixIcon: Icon(
-        icon,
-        color: Colors.deepPurple,
-      ),
+      prefixIcon: Icon(icon, color: Colors.deepPurple),
 
       filled: true,
 
       fillColor: Colors.white,
 
-      contentPadding:
-          const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 18,
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
 
       border: OutlineInputBorder(
-        borderRadius:
-            BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20),
 
         borderSide: BorderSide.none,
       ),
 
-      enabledBorder:
-          OutlineInputBorder(
-        borderRadius:
-            BorderRadius.circular(20),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
 
-        borderSide:
-            BorderSide.none,
+        borderSide: BorderSide.none,
       ),
 
-      focusedBorder:
-          OutlineInputBorder(
-        borderRadius:
-            BorderRadius.circular(20),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
 
-        borderSide:
-            const BorderSide(
-          color: Colors.deepPurple,
-          width: 2,
-        ),
+        borderSide: const BorderSide(color: Colors.deepPurple, width: 2),
       ),
     );
   }
@@ -208,41 +154,33 @@ class _AddTaskScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          const Color(0xffF4F6FA),
+      backgroundColor: const Color(0xffF4F6FA),
 
       appBar: AppBar(
-        backgroundColor:
-            Colors.deepPurple,
+        backgroundColor: Colors.deepPurple,
 
         elevation: 0,
 
         centerTitle: true,
 
         title: Text(
-          widget.task == null
-              ? "Add Task"
-              : "Edit Task",
+          widget.task == null ? "Add Task" : "Edit Task",
 
           style: const TextStyle(
             color: Colors.white,
-            fontWeight:
-                FontWeight.bold,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
 
       body: SingleChildScrollView(
-        padding:
-            const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
 
         child: Form(
           key: formKey,
 
           child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment
-                    .start,
+            crossAxisAlignment: CrossAxisAlignment.start,
 
             children: [
               const SizedBox(height: 10),
@@ -252,8 +190,7 @@ class _AddTaskScreenState
 
                 style: TextStyle(
                   fontSize: 28,
-                  fontWeight:
-                      FontWeight.bold,
+                  fontWeight: FontWeight.bold,
 
                   color: Colors.black87,
                 ),
@@ -264,56 +201,41 @@ class _AddTaskScreenState
               const Text(
                 "Manage your daily work easily",
 
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 15,
-                ),
+                style: TextStyle(color: Colors.grey, fontSize: 15),
               ),
 
               const SizedBox(height: 30),
 
               Container(
                 decoration: BoxDecoration(
-                  borderRadius:
-                      BorderRadius.circular(
-                          22),
+                  borderRadius: BorderRadius.circular(22),
 
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black
-                          .withOpacity(
-                              0.05),
+                      color: Colors.black.withOpacity(0.05),
 
                       blurRadius: 12,
 
-                      offset:
-                          const Offset(
-                              0, 5),
+                      offset: const Offset(0, 5),
                     ),
                   ],
                 ),
 
                 child: TextFormField(
-                  controller:
-                      titleController,
+                  controller: titleController,
 
                   validator: (value) {
-                    if (value == null ||
-                        value
-                            .isEmpty) {
+                    if (value == null || value.isEmpty) {
                       return "Enter title";
                     }
 
                     return null;
                   },
 
-                  decoration:
-                      customDecoration(
-                    hint:
-                        "Task Title",
+                  decoration: customDecoration(
+                    hint: "Task Title",
 
-                    icon:
-                        Icons.task_alt,
+                    icon: Icons.task_alt,
                   ),
                 ),
               ),
@@ -322,48 +244,36 @@ class _AddTaskScreenState
 
               Container(
                 decoration: BoxDecoration(
-                  borderRadius:
-                      BorderRadius.circular(
-                          22),
+                  borderRadius: BorderRadius.circular(22),
 
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black
-                          .withOpacity(
-                              0.05),
+                      color: Colors.black.withOpacity(0.05),
 
                       blurRadius: 12,
 
-                      offset:
-                          const Offset(
-                              0, 5),
+                      offset: const Offset(0, 5),
                     ),
                   ],
                 ),
 
                 child: TextFormField(
-                  controller:
-                      descriptionController,
+                  controller: descriptionController,
 
                   maxLines: 6,
 
                   validator: (value) {
-                    if (value == null ||
-                        value
-                            .isEmpty) {
+                    if (value == null || value.isEmpty) {
                       return "Enter description";
                     }
 
                     return null;
                   },
 
-                  decoration:
-                      customDecoration(
-                    hint:
-                        "Task Description",
+                  decoration: customDecoration(
+                    hint: "Task Description",
 
-                    icon:
-                        Icons.description,
+                    icon: Icons.description,
                   ),
                 ),
               ),
@@ -374,45 +284,28 @@ class _AddTaskScreenState
                 onTap: pickDate,
 
                 child: Container(
-                  width:
-                      double.infinity,
+                  width: double.infinity,
 
-                  padding:
-                      const EdgeInsets
-                          .all(20),
+                  padding: const EdgeInsets.all(20),
 
-                  decoration:
-                      BoxDecoration(
-                    gradient:
-                        LinearGradient(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
                       colors: [
-                        Colors
-                            .deepPurple
-                            .withOpacity(
-                                0.95),
+                        Colors.deepPurple.withOpacity(0.95),
 
-                        const Color(
-                            0xff8E67E8),
+                        const Color(0xff8E67E8),
                       ],
                     ),
 
-                    borderRadius:
-                        BorderRadius
-                            .circular(
-                                24),
+                    borderRadius: BorderRadius.circular(24),
 
                     boxShadow: [
                       BoxShadow(
-                        color: Colors
-                            .deepPurple
-                            .withOpacity(
-                                0.25),
+                        color: Colors.deepPurple.withOpacity(0.25),
 
                         blurRadius: 12,
 
-                        offset:
-                            const Offset(
-                                0, 5),
+                        offset: const Offset(0, 5),
                       ),
                     ],
                   ),
@@ -420,87 +313,60 @@ class _AddTaskScreenState
                   child: Row(
                     children: [
                       Container(
-                        padding:
-                            const EdgeInsets
-                                .all(12),
+                        padding: const EdgeInsets.all(12),
 
-                        decoration:
-                            BoxDecoration(
-                          color: Colors
-                              .white
-                              .withOpacity(
-                                  0.2),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
 
-                          shape:
-                              BoxShape.circle,
+                          shape: BoxShape.circle,
                         ),
 
                         child: const Icon(
-                          Icons
-                              .calendar_month,
+                          Icons.calendar_month,
 
-                          color:
-                              Colors.white,
+                          color: Colors.white,
 
                           size: 28,
                         ),
                       ),
 
-                      const SizedBox(
-                          width: 18),
+                      const SizedBox(width: 18),
 
                       Expanded(
                         child: Column(
-                          crossAxisAlignment:
-                              CrossAxisAlignment
-                                  .start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
 
                           children: [
                             const Text(
                               "Select Task Date",
 
-                              style:
-                                  TextStyle(
-                                color: Colors
-                                    .white70,
+                              style: TextStyle(
+                                color: Colors.white70,
 
-                                fontSize:
-                                    14,
+                                fontSize: 14,
                               ),
                             ),
 
-                            const SizedBox(
-                                height: 4),
+                            const SizedBox(height: 4),
 
                             Text(
-                              selectedDate
-                                      .isEmpty
+                              selectedDate.isEmpty
                                   ? "Choose Date"
                                   : selectedDate,
 
-                              style:
-                                  const TextStyle(
-                                color: Colors
-                                    .white,
+                              style: const TextStyle(
+                                color: Colors.white,
 
-                                fontSize:
-                                    20,
+                                fontSize: 20,
 
-                                fontWeight:
-                                    FontWeight
-                                        .bold,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],
                         ),
                       ),
 
-                      const Icon(
-                        Icons.arrow_forward_ios,
-
-                        color:
-                            Colors.white,
-                      ),
+                      const Icon(Icons.arrow_forward_ios, color: Colors.white),
                     ],
                   ),
                 ),
@@ -509,13 +375,9 @@ class _AddTaskScreenState
               const SizedBox(height: 40),
 
               CustomButton(
-                text: widget.task ==
-                        null
-                    ? "Add Task"
-                    : "Update Task",
+                text: widget.task == null ? "Add Task" : "Update Task",
 
-                isLoading:
-                    isLoading,
+                isLoading: isLoading,
 
                 onPressed: saveTask,
               ),

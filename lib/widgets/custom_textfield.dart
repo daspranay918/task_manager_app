@@ -4,12 +4,14 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String hint;
   final bool isPassword;
+  final IconData? icon;
 
   const CustomTextField({
     super.key,
     required this.controller,
     required this.hint,
     this.isPassword = false,
+    this.icon,
   });
 
   @override
@@ -37,15 +39,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
       },
       decoration: InputDecoration(
         hintText: widget.hint,
+        prefixIcon: widget.icon != null
+            ? Icon(widget.icon, color: Colors.deepPurple)
+            : null,
         filled: true,
         fillColor: Colors.grey.shade100,
 
         suffixIcon: widget.isPassword
             ? IconButton(
                 icon: Icon(
-                  obscureText
-                      ? Icons.visibility_off
-                      : Icons.visibility,
+                  obscureText ? Icons.visibility_off : Icons.visibility,
                 ),
                 onPressed: () {
                   setState(() {

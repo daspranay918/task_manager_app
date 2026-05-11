@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:task_manager/models/task_model.dart';
 import 'package:task_manager/screens/add_task_screen.dart';
-import 'package:task_manager/screens/login_screen.dart';
+import 'package:task_manager/screens/profile_screen.dart';
 import 'package:task_manager/services/auth_service.dart';
 import 'package:task_manager/services/firestore_service.dart';
 import 'package:task_manager/services/quote_service.dart';
@@ -17,6 +17,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
+
   String userName = "User";
 
   final FirestoreService firestoreService = FirestoreService();
@@ -51,6 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     quoteFuture = quoteService.fetchQuote();
+
+    fetchUserName();
   }
 
   @override
@@ -96,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
       body: currentIndex == 2
-          ? profileSection()
+          ? ProfileScreen(userName: userName)
           : StreamBuilder<List<TaskModel>>(
               stream: firestoreService.getTasks(),
 
@@ -132,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           children: [
                             Text(
-                              'Hello  $userName 👋',
+                              'Hello $userName 👋',
 
                               style: const TextStyle(
                                 fontSize: 28,
@@ -649,87 +652,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget profileSection() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-
-        children: [
-          Container(
-            padding: const EdgeInsets.all(6),
-
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-
-              border: Border.all(color: Colors.deepPurple, width: 3),
-            ),
-
-            child: const CircleAvatar(
-              radius: 45,
-
-              backgroundColor: Colors.deepPurple,
-
-              child: Icon(Icons.person, color: Colors.white, size: 50),
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          const Text(
-            'Task Manager App',
-
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-          ),
-
-          const SizedBox(height: 10),
-
-          const Text(
-            'Flutter Internship Project',
-
-            style: TextStyle(color: Colors.grey, fontSize: 16),
-          ),
-
-          const SizedBox(height: 40),
-
-          ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepPurple,
-
-              elevation: 4,
-
-              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
-
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-              ),
-            ),
-
-            onPressed: () async {
-              await authService.logout();
-
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const LoginScreen()),
-              );
-            },
-
-            icon: const Icon(Icons.logout, color: Colors.white),
-
-            label: const Text(
-              'Logout',
-
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
