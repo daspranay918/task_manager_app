@@ -1,10 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:task_manager/models/task_model.dart';
 
 class FirestoreService {
-  final CollectionReference tasks = FirebaseFirestore.instance.collection(
-    'tasks',
-  );
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
+  String get userId => auth.currentUser!.uid;
+
+  CollectionReference get tasks =>
+      firestore.collection('users').doc(userId).collection('tasks');
 
   Future<void> addTask(TaskModel task) async {
     await tasks.add(task.toMap());
